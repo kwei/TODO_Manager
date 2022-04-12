@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TODO Manager</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    </head>
+    <body>
+        <div class="register" id="register" class="register-container">
+            <h1>Register</h1>
+            <div class="selection">
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}" class="active">Register</a>
+            </div>
+            <form action="{{ url_for('register') }}" method="post">
+                <label for="userName"></label>
+                <input type="text" name="userName" placeholder="Name..." id="userName" required />
+                <label for="password"></label>
+                <input type="password" name="password" placeholder="Password..." id="password" required />
+                <label for="password"></label>
+                <input type="password" name="password-check" placeholder="Password-check..." id="password-check" required />
+                <div class="msg">{{ msg }}</div>
+                <input type="submit" value="Register" />
+            </form>
+        </div>
+    </body>
+    
+</html>
