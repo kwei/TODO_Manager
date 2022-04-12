@@ -84,6 +84,12 @@ def register():
     return render_template('register.html', msg = msg, isRegistered = isRegistered)
 
 
+@app.route('/tasks?<userName>')
+def tasks(userName):
+    pass
+    return
+
+
 
 
 if __name__ == "__main__":

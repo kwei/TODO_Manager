@@ -4,18 +4,38 @@
         <meta charset="utf-8">
         <title>TODO Manager</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
         <nav class="navtop">
 			<div>
 				<h1>Here&nbsp;is&nbsp;{{ userName }}'s&nbsp;TODO&nbsp;Manager</h1>
-                <a href="{{ url_for('home') }}">Home</a>
-				<a href="#">Profile</a>
-				<a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('home') }}"><i class="material-icons">home</i>Home</a>
+				<a href="#"><i class="material-icons">person</i>Profile</a>
+				<a href="{{ url_for('logout') }}"><i class="material-icons">keyboard_arrow_right</i>Logout</a>
 			</div>
 		</nav>
 
-        <h1>Home page</h1>
+        <div class="container">
+            <div class="control">
+                <a href="#"><i class="material-icons">add</i>Add</a>
+            </div>
+            <div class="tasks">
+
+            </div>
+        </div>
+        
+
+
+
+        <script>
+            async function fetchTasks(url, userName){
+                let res = await fetch(url+"?"+new URLSearchParams({
+                    userName: userName
+                }));
+                let data = await response.json();
+                print(data)
+            }
+        </script>
     </body>
-    
 </html>

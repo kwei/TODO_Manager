@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>TODO Manager</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
     <body>
         <div class="login" id="login" class="login-container">
@@ -13,9 +14,9 @@
                 <a href="{{ url_for('register') }}">Register</a>
             </div>
             <form action="{{ url_for('login') }}" method="post">
-                <label for="userName"></label>
+                <label for="userName"><i class="material-icons">person</i></label>
                 <input type="text" name="userName" placeholder="Name..." id="userName" required />
-                <label for="password"></label>
+                <label for="password"><i class="material-icons">lock</i></label>
                 <input type="password" name="password" placeholder="Password..." id="password" required />
                 <div class="msg">{{ msg }}</div>
                 <input type="submit" value="Login" />
