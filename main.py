@@ -28,7 +28,7 @@ def home():
     return redirect(url_for('login'))
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
     msg = ''
     isLogged = False
@@ -36,7 +36,7 @@ def login():
         userName = request.form["userName"]
         password = request.form["password"]
         
-        if not db_controller_member.isExist(userName, password):
+        if not db_controller_member.isExist(userName):
             msg = "Incorrect userName or password."
         else:
             account = db_controller_member.fetch(userName, password)
@@ -46,7 +46,7 @@ def login():
             isLogged = True
             msg = "log-in successfully."
 
-            return redirect(url_for('home'))
+            return redirect(url_for('home', msg = msg, isLogged = isLogged, userName = session["userName"]))
 
     return render_template('login.html', msg = msg, isLogged = isLogged)
 
@@ -58,7 +58,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods = ['GET', 'POST'])
 def register():
     msg = ''
     isRegistered = False
@@ -68,15 +68,20 @@ def register():
         password_check = request.form["password-check"]
         isRegistered = True
 
-        if db_controller_member.isExist(userName, password):
-            msg = "Account already exists."
+        if db_controller_member.isExist(userName):
+            msg = "User name has been already used."
         elif not userName or not password or not password_check:
             msg = "Please complete the entire form."
         elif password != password_check:
             msg = "The password-check should be equal to the password."
         else:
-            db_controller_member.insert(userName, password)
+            id, userName = db_controller_member.insert(userName, password)
             msg = "Registered successfully."
+            session["isAuth"] = True
+            session['id'] = id
+            session['userName'] = userName
+            isLogged = True
+            return redirect(url_for('home', msg = msg, isLogged = isLogged, userName = session["userName"]))
     
     elif request.method == "POST":
         msg = "Please complete the entire form."
@@ -84,10 +89,39 @@ def register():
     return render_template('register.html', msg = msg, isRegistered = isRegistered)
 
 
-@app.route('/tasks?<userName>')
-def tasks(userName):
-    pass
-    return
+@app.route('/tasks/fetchAll/<userName>')
+def taskFetchAll(userName):
+    return db_controller_task.fetchAll({
+        "userName": userName
+    })
+
+@app.route('/tasks/create/<userName>', methods = ["POST"])
+def taskCreate(userName):
+    task = None
+    if request.method == "POST":
+        task = request.get_json()
+    return db_controller_task.create({
+        "userName": userName,
+        "task": task
+    })
+
+@app.route('/tasks/update/<userName>/<tagSequence>', methods = ["POST"])
+def taskUpdate(userName, tagSequence):
+    ask = None
+    if request.method == "POST":
+        task = request.get_json()
+    return db_controller_task.update({
+        "userName": userName,
+        "tagSequence": tagSequence,
+        "task": task
+    })
+
+@app.route('/tasks/delete/<userName>/<tagSequence>')
+def taskDelete(userName, tagSequence):
+    return db_controller_task.delete({
+        "userName": userName,
+        "tagSequence": tagSequence
+    })
 
 
 
@@ -99,11 +133,11 @@ if __name__ == "__main__":
     schemas["members"] = "CREATE TABLE members (\
                             id INTEGER PRIMARY KEY AUTOINCREMENT,\
                             userName varchar(255) NOT NULL,\
-                            userPassword varchar(255) NOT NULL,\
-                            tasks varchar(255));"
+                            userPassword varchar(255) NOT NULL);"
     schemas["tasks"] = "CREATE TABLE tasks (\
                             id INTEGER PRIMARY KEY AUTOINCREMENT,\
-                            taskIndex int NOT NULL,\
+                            tagSequence varchar(255) NOT NULL,\
+                            userName varchar(255) NOT NULL,\
                             title varchar(255) NOT NULL,\
                             content varchar(255) NOT NULL,\
                             createTime time NOT NULL,\
