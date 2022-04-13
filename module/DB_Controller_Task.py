@@ -13,7 +13,7 @@ class DB_Controller_Task():
         db = self._sql.get_db()
         cursor = db.cursor()
         cursor.execute("SELECT * from tasks WHERE userName = ?", (userName,))
-        fetchRes = cursor.fetchone()
+        fetchRes = cursor.fetchall()
         db.close()
         print("Tasks fetch result: ", fetchRes)
         if not fetchRes:
@@ -47,7 +47,8 @@ class DB_Controller_Task():
         cursor.execute("INSERT INTO tasks VALUES (NULL, ?, ?, ?, ?, ?, ?)", (tagSequence, userName, task["title"], task["content"], task["createTime"], task["createDate"]))
         db.commit()
         db.close()
-        return tagSequence
+        task["tagSequence"] = tagSequence
+        return json.dumps(task)
 
     
     def update(self, data):
@@ -62,7 +63,8 @@ class DB_Controller_Task():
             return "No sql instance."
         db = self._sql.get_db()
         cursor = db.cursor()
-        cursor.execute("UPDATE tasks SET title = ? content = ? createTime = ? createDate = ? WHERE userName = ? AND tagSequence = ?", (task["title"], task["content"], task["createTime"], task["createDate"], userName, tagSequence))
+        cursor.execute("UPDATE tasks SET title = ?, content = ?, createTime = ?, createDate = ? WHERE userName = ? AND tagSequence = ?", (task["title"], task["content"], task["createTime"], task["createDate"], userName, tagSequence))
+        db.commit()
         db.close()
         return "Update successfully."
 
@@ -77,5 +79,6 @@ class DB_Controller_Task():
         db = self._sql.get_db()
         cursor = db.cursor()
         cursor.execute("DELETE FROM tasks WHERE userName = ? AND tagSequence = ?", (userName, tagSequence))
+        db.commit()
         db.close()
         return "Delete successfully."

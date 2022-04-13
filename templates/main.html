@@ -20,8 +20,21 @@
             <div class="control">
                 <a href="#"><i class="material-icons">add</i>Add</a>
             </div>
-            <div class="tasks">
-
+            <div class="tasks" id="tasks">
+                <div class="note" id="tagSequence">
+                    <div class="note-title-container">
+                        <!-- <div class="note-control">
+                            <a class="note-edit" href="{{ url_for('home') }}"><i class="material-icons">edit</i></a>
+                            <a class="note-delete" href="{{ url_for('home') }}"><i class="material-icons">clear</i></a>
+                        </div> -->
+                        <a class="note-title">TITLE</a>
+                        <a class="note-createTime">20:10</a>
+                        <a class="note-createDate">2022-04-13</a>
+                    </div>
+                    <div class="note-content">
+                        Content...
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -29,12 +42,61 @@
 
 
         <script>
-            async function fetchTasks(url, userName){
-                let res = await fetch(url+"?"+new URLSearchParams({
-                    userName: userName
-                }));
-                let data = await response.json();
-                print(data)
+            window.onload = function () {
+                fetchTasks('/tasks/fetchAll', `{{ userName }}`);
+            }
+
+            function fetchTasks(url, userName){
+                fetch(url+"/"+userName)
+                .then((res) => res.json())
+                .then((data) => {
+                    // console.log("fetch res: ", data, typeof(data));
+
+                    let tasksDiv = document.getElementById("tasks");
+                    data.map((element, index) => {
+                        let id = element["id"];
+                        let tagSequence = element["tagSequence"];
+                        let userName = element["userName"];
+                        let title = element["title"];
+                        let content = element["content"];
+                        let createTime = element["createTime"];
+                        let createDate = element["createDate"];
+
+                        let noteDiv = document.createElement("div");
+                        noteDiv.setAttribute('class', "note");
+                        noteDiv.setAttribute('id', tagSequence);
+
+                        let note_containerDiv = document.createElement("div");
+                        note_containerDiv.setAttribute('class', "note-title-container");
+
+                        let note_titleDiv = document.createElement("a");
+                        note_titleDiv.setAttribute('class', "note-title");
+                        note_titleDiv.textContent = title;
+
+                        let note_createTimeDiv = document.createElement("a");
+                        note_createTimeDiv.setAttribute('class', "note-createTime");
+                        note_createTimeDiv.textContent = createTime;
+
+                        let note_createDateDiv = document.createElement("a");
+                        note_createDateDiv.setAttribute('class', "note-createDate");
+                        note_createDateDiv.textContent = createDate;
+
+                        note_containerDiv.appendChild(note_titleDiv);
+                        note_containerDiv.appendChild(note_createTimeDiv);
+                        note_containerDiv.appendChild(note_createDateDiv);
+
+                        noteDiv.appendChild(note_containerDiv);
+
+                        let noteContentDiv = document.createElement("div");
+                        noteContentDiv.setAttribute('class', "note-content");
+                        noteContentDiv.textContent = content;
+
+                        noteDiv.appendChild(noteContentDiv);
+
+                        tasksDiv.appendChild(noteDiv);
+                    });
+                })
+                .catch((e) => console.log(e));
             }
         </script>
     </body>
