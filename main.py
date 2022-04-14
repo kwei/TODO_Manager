@@ -1,5 +1,4 @@
-from asyncio import tasks
-from flask import Flask, render_template, g, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
 from model.SQL import SQL
 from config import Config

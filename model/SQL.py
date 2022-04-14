@@ -1,4 +1,3 @@
-from config import Config
 import sqlite3
 import sys
 
