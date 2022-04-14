@@ -18,15 +18,11 @@
 
         <div class="container">
             <div class="control">
-                <a href="#"><i class="material-icons">add</i>Add</a>
+                <a href="#" onclick="openEditor('create')"><i class="material-icons">add</i>Add</a>
             </div>
             <div class="tasks" id="tasks">
-                <div class="note" id="tagSequence">
+                <!-- <div class="note" id="tagSequence" ondblclick="openEditor()">
                     <div class="note-title-container">
-                        <!-- <div class="note-control">
-                            <a class="note-edit" href="{{ url_for('home') }}"><i class="material-icons">edit</i></a>
-                            <a class="note-delete" href="{{ url_for('home') }}"><i class="material-icons">clear</i></a>
-                        </div> -->
                         <a class="note-title">TITLE</a>
                         <a class="note-createTime">20:10</a>
                         <a class="note-createDate">2022-04-13</a>
@@ -34,8 +30,32 @@
                     <div class="note-content">
                         Content...
                     </div>
+                </div> -->
+            </div>
+
+            <!-- The Modal -->
+            <div id="modal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close" onclick="closeEditor()">&times;</span>
+                        <h2>Note Editor</h2>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" name="title", placeholder="Title..." value="New Title"/>
+                        <input type="text" name="content", placeholder="Content..." value="New Content"/>
+                        <input type="time" name="time"/>
+                        <input type="date" name="date"/>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="update-btn">Update</a>
+                        <a class="delete-btn">Delete</a>
+                        <a class="create-btn">Create</a>
+                    </div>
                 </div>
             </div>
+
         </div>
         
 
@@ -44,6 +64,16 @@
         <script>
             window.onload = function () {
                 fetchTasks('/tasks/fetchAll', `{{ userName }}`);
+            }
+
+            function openEditor() {
+                let modal = document.getElementById("modal");
+                modal.style.display = "block";
+            }
+
+            function closeEditor() {
+                let modal = document.getElementById("modal");
+                modal.style.display = "none";
             }
 
             function fetchTasks(url, userName){
@@ -65,6 +95,7 @@
                         let noteDiv = document.createElement("div");
                         noteDiv.setAttribute('class', "note");
                         noteDiv.setAttribute('id', tagSequence);
+                        noteDiv.setAttribute('ondblclick', "openEditor(tagSequence)")
 
                         let note_containerDiv = document.createElement("div");
                         note_containerDiv.setAttribute('class', "note-title-container");
@@ -98,6 +129,13 @@
                 })
                 .catch((e) => console.log(e));
             }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeEditor();
+                }
+            }
+
         </script>
     </body>
 </html>
