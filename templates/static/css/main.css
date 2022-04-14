@@ -1,5 +1,6 @@
 body {
     background-color: #f3f4f7;
+    font-family: Arial, Helvetica, sans-serif
 }
 
 .login, .register {
@@ -183,8 +184,7 @@ body {
     height: 30px;
     flex: 1;
     font-size: 24px;
-    margin-left: 5px;
-    margin-top: 5px;
+    margin: 5px;
     float: left;
     color: #000000;
     font-weight: normal;
@@ -215,73 +215,164 @@ body {
 }
 
 
-/* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+
+.modal-content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 80%;
+    width: 40%;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
-  }
-  
-  /* Add Animation */
-  @-webkit-keyframes animatetop {
+    animation-duration: 0.4s;
+    border-radius: 0.5em;
+}
+
+@-webkit-keyframes animatetop {
     from {top:-300px; opacity:0} 
     to {top:0; opacity:1}
-  }
-  
-  @keyframes animatetop {
+}
+
+@keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
-  }
-  
-  /* The Close Button */
-  .close {
+}
+
+
+.close {
     color: rgb(0, 0, 0);
     float: right;
     font-size: 28px;
     font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
+}
+
+.close:hover, .close:focus {
     color: rgb(255, 0, 0);
     text-decoration: none;
     cursor: pointer;
-  }
-  
-  .modal-header {
+}
+
+.modal-header {
     padding: 2px 16px;
     background-color: #fefefe;
-    color: rgb(0, 0, 0);
+    color: #5b6574;
     border-bottom: 2px solid black;
-  }
-  
-  .modal-body {padding: 2px 16px;}
-  
-  .modal-footer {
+}
+
+.modal-header h2 {
+    color: #5b6574;
+    font-size: 24px;
+    padding: 0px 0 0px 0;
+    margin: 10px 0px 10px 0px;
+}
+
+.modal-body {
+    padding: 2px 16px;
+    margin-top: 20px;
+
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.modal-footer {
     padding: 2px 16px;
     background-color: #fefefe;
+    margin-top: 15px;
+    margin-bottom: 20px;
     color: rgb(0, 0, 0);
-  }
+
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.modal-body input[type="text"], .modal-body input[type="time"], .modal-body input[type="date"] {
+    width: auto;
+    height: 40px;
+    border: 1px solid #dee0e4;
+    margin-bottom: 20px;
+    padding: 0 15px;
+    border-radius: 0.4em;
+}
+
+.modal-body label {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: auto;
+    /* background-color: #adadad; */
+    color: #000000;
+}
+
+.update-btn, .delete-btn, .create-btn {
+    width: auto;
+    height: 20px;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 0.4em;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    transition: background-color 0.2s;
+    justify-content: center;
+    align-items: center;
+}
+
+.update-btn {
+    background-color: #d68f25;
+}
+
+.delete-btn {
+    background-color: #e95f5f;
+}
+
+.create-btn {
+    background-color: #57a754;
+}
+
+.update-btn > span, .delete-btn > span, .create-btn > span {
+    display: flex;
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+    justify-content: center;
+}
+
+.update-btn:hover, .delete-btn:hover, .create-btn:hover {
+    transition: background-color 0.2s;
+}
+
+.update-btn:hover {
+    background-color: #99671b;
+}
+
+.delete-btn:hover {
+    background-color: #9c4141;
+}
+
+.create-btn:hover {
+    background-color: #356434;
+}

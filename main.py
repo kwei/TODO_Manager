@@ -100,24 +100,27 @@ def taskCreate(userName):
     task = None
     if request.method == "POST":
         task = request.get_json()
-    return db_controller_task.create({
-        "userName": userName,
-        "task": task
-    })
+        print("In taskCreate -> ", task)
+        return db_controller_task.create({
+            "userName": userName,
+            "task": task
+        })
 
 @app.route('/tasks/update/<userName>/<tagSequence>', methods = ["POST"])
 def taskUpdate(userName, tagSequence):
-    ask = None
+    task = None
     if request.method == "POST":
         task = request.get_json()
-    return db_controller_task.update({
-        "userName": userName,
-        "tagSequence": tagSequence,
-        "task": task
-    })
+        print("In taskUpdate -> ", task)
+        return db_controller_task.update({
+            "userName": userName,
+            "tagSequence": tagSequence,
+            "task": task
+        })
 
 @app.route('/tasks/delete/<userName>/<tagSequence>')
 def taskDelete(userName, tagSequence):
+    print("In taskDelete -> ", userName, tagSequence)
     return db_controller_task.delete({
         "userName": userName,
         "tagSequence": tagSequence

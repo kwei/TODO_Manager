@@ -37,6 +37,8 @@ class DB_Controller_Task():
         # 2. update the indexes of the member to the members.
         userName = data["userName"]
         task = data["task"]
+        print("task: ", task)
+        print("userName: ", userName)
         if task is None:
             return "No task obj."
         tagSequence = hash(task["createTime"]+task["createDate"])
@@ -59,6 +61,9 @@ class DB_Controller_Task():
             return "No task obj."
         userName = data["userName"]
         tagSequence = data["tagSequence"]
+        print("task: ", task)
+        print("userName: ", userName)
+        print("tagSequence: ", tagSequence)
         if not self._sql:
             return "No sql instance."
         db = self._sql.get_db()
@@ -74,6 +79,8 @@ class DB_Controller_Task():
         # 2. according to the indexes, fetch the members to update the task of the member.
         userName = data["userName"]
         tagSequence = data["tagSequence"]
+        print("userName: ", userName)
+        print("tagSequence: ", tagSequence)
         if not self._sql:
             return "No sql instance."
         db = self._sql.get_db()

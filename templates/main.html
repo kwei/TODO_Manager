@@ -5,6 +5,7 @@
         <title>TODO Manager</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
     </head>
     <body>
         <nav class="navtop">
@@ -21,37 +22,28 @@
                 <a href="#" onclick="openEditor('create')"><i class="material-icons">add</i>Add</a>
             </div>
             <div class="tasks" id="tasks">
-                <!-- <div class="note" id="tagSequence" ondblclick="openEditor()">
-                    <div class="note-title-container">
-                        <a class="note-title">TITLE</a>
-                        <a class="note-createTime">20:10</a>
-                        <a class="note-createDate">2022-04-13</a>
-                    </div>
-                    <div class="note-content">
-                        Content...
-                    </div>
-                </div> -->
             </div>
 
-            <!-- The Modal -->
             <div id="modal" class="modal">
-
-                <!-- Modal content -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <span class="close" onclick="closeEditor()">&times;</span>
                         <h2>Note Editor</h2>
                     </div>
                     <div class="modal-body">
-                        <input type="text" name="title", placeholder="Title..." value="New Title"/>
-                        <input type="text" name="content", placeholder="Content..." value="New Content"/>
-                        <input type="time" name="time"/>
-                        <input type="date" name="date"/>
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title", placeholder="New Title Here~" value=""/>
+                        <label for="title">Content</label>
+                        <input type="text" id="content" name="content", placeholder="New Content Here~" value=""/>
+                        <label for="title">Time</label>
+                        <input type="time" id="time" name="time"/>
+                        <label for="title">Date</label>
+                        <input type="date" id="date" name="date"/>
                     </div>
                     <div class="modal-footer">
-                        <a class="update-btn">Update</a>
-                        <a class="delete-btn">Delete</a>
-                        <a class="create-btn">Create</a>
+                        <a class="update-btn" id="update-btn"><span>Update</span></a>
+                        <a class="delete-btn" id="delete-btn"><span>Delete</span></a>
+                        <a class="create-btn" id="create-btn"><span>Create</span></a>
                     </div>
                 </div>
             </div>
@@ -66,22 +58,137 @@
                 fetchTasks('/tasks/fetchAll', `{{ userName }}`);
             }
 
-            function openEditor() {
+            function openEditor(cmd) {
                 let modal = document.getElementById("modal");
+                if (cmd === "create") {
+                    let updateBtn = document.getElementById("update-btn");
+                    let deleteBtn = document.getElementById("delete-btn");
+                    updateBtn.setAttribute("disabled", "disabled");
+                    deleteBtn.setAttribute("disabled", "disabled");
+
+                    let createBtn = document.getElementById("create-btn");
+                    createBtn.setAttribute("onclick", "createTask()");
+                }else {
+                    let createBtn = document.getElementById("create-btn");
+                    createBtn.setAttribute("disabled", "disabled");
+
+                    let element = cmd;
+                    console.log("element: ", element);
+                    let id = element["id"];
+                    let tagSequence = element["tagSequence"];
+                    let userName = element["userName"];
+                    let title = element["title"];
+                    let content = element["content"];
+                    let createTime = element["createTime"];
+                    let createDate = element["createDate"];
+
+                    let titleInput = document.getElementById("title");
+                    let contentInput = document.getElementById("content");
+                    let timeInput = document.getElementById("time");
+                    let dateInput = document.getElementById("date");
+                    titleInput.setAttribute("value", title);
+                    contentInput.setAttribute("value", content);
+                    timeInput.setAttribute("value", createTime);
+                    dateInput.setAttribute("value", createDate);
+
+                    let updateBtn = document.getElementById("update-btn");
+                    let deleteBtn = document.getElementById("delete-btn");
+                    updateBtn.setAttribute("onclick", "updateTask('" + tagSequence + "')");
+                    deleteBtn.setAttribute("onclick", "deleteTask('" + tagSequence + "')");
+                }
                 modal.style.display = "block";
             }
 
             function closeEditor() {
                 let modal = document.getElementById("modal");
                 modal.style.display = "none";
+
+                let titleInput = document.getElementById("title");
+                let contentInput = document.getElementById("content");
+                let timeInput = document.getElementById("time");
+                let dateInput = document.getElementById("date");
+                titleInput.setAttribute("value", "");
+                contentInput.setAttribute("value", "");
+                timeInput.setAttribute("value", "");
+                dateInput.setAttribute("value", "");
+
+                let updateBtn = document.getElementById("update-btn");
+                let deleteBtn = document.getElementById("delete-btn");
+                let createBtn = document.getElementById("create-btn");
+                updateBtn.setAttribute("disabled", "");
+                deleteBtn.setAttribute("disabled", "");
+                createBtn.setAttribute("disabled", "");
+            }
+
+            function createTask () {
+                let titleVal = document.getElementById("title").value;
+                let contentVal = document.getElementById("content").value;
+                let timeVal = document.getElementById("time").value;
+                let dateVal = document.getElementById("date").value;
+                fetch('/tasks/create/' + `{{ userName }}`, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "title": titleVal,
+                        "tagSequence": null,
+                        "content": contentVal,
+                        "createTime": timeVal,
+                        "createDate": dateVal
+                    })
+                })
+                .then((res) => {
+                    console.log(res);
+                    return res.json()
+                })
+                .then((data) => {
+                    console.log("create res: ", data);
+                    window.location.reload();
+                })
+                .catch((e) => console.log(e));
+            }
+
+            function updateTask (tagSequence) {
+                let titleVal = document.getElementById("title").value;
+                let contentVal = document.getElementById("content").value;
+                let timeVal = document.getElementById("time").value;
+                let dateVal = document.getElementById("date").value;
+                fetch('/tasks/update/' + `{{ userName }}` + "/" + tagSequence, {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "title": titleVal,
+                        "tagSequence": ""+tagSequence,
+                        "content": contentVal,
+                        "createTime": timeVal,
+                        "createDate": dateVal
+                    })
+                })
+                .then((res) => {
+                    console.log("update res: ", res);
+                    window.location.reload();
+                })
+                .catch((e) => console.log(e));
+            }
+
+            function deleteTask (tagSequence) {
+                fetch('/tasks/delete/' + `{{ userName }}` + "/" + tagSequence)
+                .then((res) => {
+                    console.log("delete res: ", res);
+                    window.location.reload();
+                })
+                .catch((e) => console.log(e));
             }
 
             function fetchTasks(url, userName){
                 fetch(url+"/"+userName)
                 .then((res) => res.json())
                 .then((data) => {
-                    // console.log("fetch res: ", data, typeof(data));
-
                     let tasksDiv = document.getElementById("tasks");
                     data.map((element, index) => {
                         let id = element["id"];
@@ -94,8 +201,8 @@
 
                         let noteDiv = document.createElement("div");
                         noteDiv.setAttribute('class', "note");
-                        noteDiv.setAttribute('id', tagSequence);
-                        noteDiv.setAttribute('ondblclick', "openEditor(tagSequence)")
+                        noteDiv.setAttribute('id', ""+tagSequence);
+                        noteDiv.setAttribute('ondblclick', "openEditor(" + JSON.stringify(element) + ")");
 
                         let note_containerDiv = document.createElement("div");
                         note_containerDiv.setAttribute('class', "note-title-container");
