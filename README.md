@@ -10,5 +10,5 @@ A coding test about developing a website that the member can handle their TODO l
 - [X] In TODO-list, there are the content, time, and dates.
 - [X] Member can create, delete, and update the TOD list.
 - [X] This system should be implemeted in Python with FastAPI or Flask, or in Golang.
-- [ ] Unit test is needed.
+- [X] Unit test is needed.
 - [ ] (Optional) Notify when the TODO task expires.
