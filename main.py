@@ -145,9 +145,9 @@ if __name__ == "__main__":
                             createTime time NOT NULL,\
                             createDate date NOT NULL);"
 
-    sql.db_name = config.db_name
-    sql.table_names = table_names
-    sql.schemas = schemas
+    sql.set_db_name(config.db_name())
+    sql.set_table_names(table_names)
+    sql.set_schemas(schemas)
 
     sql.init_db()
 

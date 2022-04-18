@@ -11,15 +11,15 @@ schemas = {
 '''
 
 class SQL():
-    def __init__(self, db_name=None, table_names=None, schemas=None):
-        self._db_name = db_name
-        self._schemas = schemas
-        self._table_names = table_names
+    def __init__(self, dbName=None, tableNames=None, tableSchemas=None):
+        self._db_name = dbName
+        self._schemas = tableSchemas
+        self._table_names = tableNames
 
     def get_db(self):
-        if self._db_name() == None:
+        if self._db_name == None:
             return None
-        return sqlite3.connect(self._db_name())
+        return sqlite3.connect(self._db_name)
     
 
     def init_db(self):
@@ -34,30 +34,25 @@ class SQL():
             else:
                 print("Table {} is existed.".format(table_name), file=sys.stdout)
         db.close()
+        return True
     
 
 
-    @property
-    def db_name(self):
+    def get_db_name(self):
         return self._db_name
     
-    @property
-    def schemas(self):
+    def get_schemas(self):
         return self._schemas
     
-    @property
-    def table_names(self):
+    def get_table_names(self):
         return self._table_names
     
 
-    @db_name.setter
-    def db_name(self, db_name):
-        self._db_name = db_name
+    def set_db_name(self, dbName):
+        self._db_name = dbName
     
-    @schemas.setter
-    def schemas(self, schemas):
-        self._schemas = schemas
+    def set_schemas(self, tableSchemas):
+        self._schemas = tableSchemas
     
-    @table_names.setter
-    def table_names(self, table_names):
-        self._table_names = table_names
+    def set_table_names(self, tableNames):
+        self._table_names = tableNames
